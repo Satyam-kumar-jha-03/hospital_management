@@ -49,7 +49,7 @@ public class hospital_db {
 //                        //getDoc(con,input);
 //                        break;
                     case 0:
-                        //exit();
+                        exit();
                         input.close();
                     default:
                         System.out.println("invalid choice , please choose again ");
@@ -59,7 +59,10 @@ public class hospital_db {
         catch (SQLException e){
             System.out.println(e.getMessage());
         }//catch(InterruptedException e){
-           // throw new RuntimeException(e);
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        // throw new RuntimeException(e);
         //}
 
     }
@@ -79,16 +82,20 @@ public class hospital_db {
             int did =input.nextInt();
             System.out.println("enter the hospital id ");
             int hid =input.nextInt();
+
             String sql = "INSERT INTO doctor( F_name, L_name, age, specialist, gender, doctor_id, hospital_id)\n"
-            +"VALUES ('aditya','gupta',47,'neurosurgeon','m',104,1101);";
+            +"VALUES ('"+F_name+ "','"+L_name+"',"+ age+",'"+ spl+"','"+gender+"' ,'" + did+"', '"+ hid+"');";
+
             try( Statement stmt = con.createStatement()){
-                int affectrows= stmt.executeUpdate(sql);
+//                ResultSet rs = stmt.executeQuery(sql);
+                int affectrows = stmt.executeUpdate(sql);
                 if(affectrows>0){
                     System.out.println("added successful");
                 }else{
                     System.out.println("failed to add data ");
                 }}
             }catch(SQLException e){
+            System.out.println("error coming");
                 System.out.println(e.getMessage());
             }
     }
@@ -120,7 +127,7 @@ public class hospital_db {
             System.out.println("| First name | Last name | age | specialist | gender | doctor_id  | hospital_id  |");
             System.out.println("+------------+----------+------+------------+--------+------------+--------------+");
             while (rs.next()) {
-                int s_no = rs.getInt("no");
+//                int s_no = rs.getInt("no");
                 String Fname = rs.getString("F_name");
                 String Lname = rs.getString("L_name");
                 int age = rs.getInt("age");
@@ -143,5 +150,5 @@ public class hospital_db {
             i--;
         }
         System.out.println();
-        System.out.println("thankyou for using hospital reservation system!!!!");
+        System.out.println("thank you for using hospital reservation system!!!!");
 }}
