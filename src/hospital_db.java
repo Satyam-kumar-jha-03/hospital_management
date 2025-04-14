@@ -1,20 +1,24 @@
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.format.DateTimeFormatter;
 
 public class hospital_db {
     private static final String url = "jdbc:mysql://localhost:3306/hospital_management";
     private static final String username = "root";
     private static final String pass = "spsp.0011";
     static Scanner input = new Scanner(System.in);
+    static LocalDate date= LocalDate.now();
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         System.out.println(" Enter your Choice : ");
         System.out.println(" 1. doctor database");
         System.out.println(" 2. patient database");
         System.out.println(" 3. hospital database");
+        System.out.println(" 4. record database");
         System.out.println(" 0. Exit ");
         System.out.print(" choose an option --->");
         int ch = input.nextInt();
@@ -35,7 +39,7 @@ public class hospital_db {
                     System.out.println(" 2. Remove Data from the database ");
                     System.out.println(" 3. Update doctor Data in the database ");
                     System.out.println(" 4. show the doctor database ");
-//                System.out.println(" 5. get doctor specification  ");
+                    System.out.println(" 5. get doctor specification  ");
                     System.out.println(" 0. Exit ");
                     System.out.print(" choose an option --->");
                     int a = input.nextInt();
@@ -52,9 +56,9 @@ public class hospital_db {
                         case 4:
                             showDoc(con);
                             break;
-//                    case 5:
-//                        //getDoc(con,input);
-//                        break;
+                        case 5:
+                            getDoc(con);
+                            break;
                         case 0:
                             exit();
                             input.close();
@@ -69,7 +73,7 @@ public class hospital_db {
                     System.out.println(" 2. Remove Data from the database ");
                     System.out.println(" 3. Update doctor Data in the database ");
                     System.out.println(" 4. show the doctor database ");
-//                System.out.println(" 5. get doctor specification  ");
+                    System.out.println(" 5. get doctor specification  ");
                     System.out.println(" 0. Exit ");
                     System.out.print(" choose an option --->");
                     int a = input.nextInt();
@@ -86,9 +90,9 @@ public class hospital_db {
                         case 4:
                             showPat(con);
                             break;
-//                    case 5:
-//                        //getPat(con,input);
-//                        break;
+                        case 5:
+                            getPat(con);
+                            break;
                         case 0:
                             exit();
                             input.close();
@@ -103,7 +107,7 @@ public class hospital_db {
                     System.out.println(" 2. Remove Data from the database ");
                     System.out.println(" 3. Update hospital Data in the database ");
                     System.out.println(" 4. show the hospital database ");
-//                System.out.println(" 5. get hospital specification  ");
+                    System.out.println(" 5. get hospital specification  ");
                     System.out.println(" 0. Exit ");
                     System.out.print(" choose an option --->");
                     int a = input.nextInt();
@@ -120,9 +124,9 @@ public class hospital_db {
                         case 4:
                             showHos(con);
                             break;
-//                    case 5:
-//                        //getPat(con,input);
-//                        break;
+                        case 5:
+                            getHos(con);
+                            break;
                         case 0:
                             exit();
                             input.close();
@@ -130,6 +134,41 @@ public class hospital_db {
                             System.out.println("invalid choice , please choose again ");
                     }
                 }
+            case 4:
+                while (true) {
+                    System.out.println(" Enter your Choice : ");
+                    System.out.println(" 1. Add record data to the database ");
+                    System.out.println(" 2. Remove Data from the database ");
+                    System.out.println(" 3. Update record Data in the database ");
+                    System.out.println(" 4. show the patient record database ");
+                    System.out.println(" 5. get hospital specification  ");
+                    System.out.println(" 0. Exit ");
+                    System.out.print(" choose an option --->");
+                    int a = input.nextInt();
+                    switch (a) {
+                        case 1:
+                            addRec(con, input);
+                            break;
+                        case 2:
+                            delRec(con);
+                            break;
+                        case 3:
+                            updRec(con, input);
+                            break;
+                        case 4:
+                            showRec(con);
+                            break;
+                        case 5:
+                            getRec(con);
+                            break;
+                        case 0:
+                            exit();
+                            input.close();
+                        default:
+                            System.out.println("invalid choice , please choose again ");
+                    }
+                }
+
         }} catch(SQLException e){
                 System.out.println(e.getMessage());
             }//catch(InterruptedException e){
@@ -151,21 +190,23 @@ public class hospital_db {
         System.out.println("thank you for using hospital reservation system!!!!");
     }
 
+
+
     private static void addDoc(Connection con, Scanner input) {
         try {
-            System.out.println("enter the first name ");
+            System.out.println("enter the first name of the doctor ");
             String F_name = input.next();
-            System.out.println("enter the last name ");
+            System.out.println("enter the last name of the doctor ");
             String L_name = input.next();
-            System.out.println("enter the age ");
+            System.out.println("enter the age of the doctor");
             int age = input.nextInt();
-            System.out.println("enter the specialization ");
+            System.out.println("enter the specialization of the doctor");
             String spl = input.next();
-            System.out.println("enter the gender ");
+            System.out.println("enter the gender of the doctor");
             String gender = input.next();
-            System.out.println("enter the doctor id ");
+            System.out.println("enter the doctor id od the doctor ");
             int did = input.nextInt();
-            System.out.println("enter the hospital id ");
+            System.out.println("enter the hospital id in which the doctor works");
             int hid = input.nextInt();
 
             String sql = "INSERT INTO doctor( F_name, L_name, age, specialist, gender, doctor_id, hospital_id)\n"
@@ -211,7 +252,7 @@ public class hospital_db {
 
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.println("Current Reservations:");
+            System.out.println("Current doctors:");
             System.out.println("+------------+-----------+-----+------------+--------+------------+--------------+");
             System.out.println("| First name | Last name | age | specialist | gender | doctor_id  | hospital_id  |");
             System.out.println("+------------+----------+------+------------+--------+------------+--------------+");
@@ -334,21 +375,53 @@ public class hospital_db {
         }
     }
 
+    private static void getDoc(Connection con) throws SQLException {
+
+        System.out.println("enter the doctor id you want to check");
+        int d_id=input.nextInt();
+        String sql = "SELECT * FROM doctor where doctor_id =" + d_id + " ;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("data of the doctor you wany to see:");
+            System.out.println("+------------+-----------+-----+------------+--------+------------+--------------+");
+            System.out.println("| First name | Last name | age | specialist | gender | doctor_id  | hospital_id  |");
+            System.out.println("+------------+----------+------+------------+--------+------------+--------------+");
+            while(rs.next()) {
+                if(rs.getInt("doctor_id")==d_id){
+//                int s_no = rs.getInt("no");
+                    String Fname = rs.getString("F_name");
+                    String Lname = rs.getString("L_name");
+                    int age = rs.getInt("age");
+                    String spl = rs.getString("specialist");
+                    String gen = rs.getString("gender");
+                    int did = rs.getInt("doctor_id");
+                    int hid = rs.getInt("hospital_id");
+                    System.out.printf("| %-10s | %-8s | %-4d | %-10s | %-4s | %-10d | %-10d |\n", Fname, Lname, age, spl, gen, did, hid);
+                    System.out.println("+------------+----------+------+------------+--------+------------+--------------+");
+                }else{
+                    System.out.println("there is no data present of the given doctor with "+d_id+ "as doctor id " );
+                }
+            }
+
+        }
+    }
+
     private static void addPat (Connection con, Scanner input){
         try {
-            System.out.println("enter the first name ");
+            System.out.println("enter the first name of the patient");
             String F_name = input.next();
-            System.out.println("enter the last name ");
+            System.out.println("enter the last name of the patient");
             String L_name = input.next();
-            System.out.println("enter the age ");
+            System.out.println("enter the age of the patient");
             int age = input.nextInt();
-            System.out.println("enter the disease");
+            System.out.println("enter the name of the disease found in the patient");
             String dse = input.next();
-            System.out.println("enter the gender ");
+            System.out.println("enter the gender of the patient");
             String gender = input.next();
-            System.out.println("enter the phone number ");
+            System.out.println("enter the phone number of the patient");
             String p_no = input.nextLine();
-            System.out.println("enter the patient id ");
+            System.out.println("enter the patient id of the patient");
             int pid = input.nextInt();
 
             String sql = "INSERT INTO patient( F_name, L_name, age, disease, gender, phone_number, patient_id)\n"
@@ -394,7 +467,7 @@ public class hospital_db {
 
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.println("Current Reservations:");
+            System.out.println("data of all patients in the database:");
             System.out.println("+------------+-----------+-----+---------+--------+---------------+--------------+");
             System.out.println("| First name | Last name | age | disease | gender | Phone_number  | patient_id  |");
             System.out.println("+------------+-----------+-----+---------+--------+---------------+--------------+");
@@ -540,15 +613,45 @@ public class hospital_db {
         }
     }
 
+    private static void getPat(Connection con) throws SQLException {
+
+        System.out.println("enter the patient id you want to check");
+        int d_id=input.nextInt();
+        String sql = "SELECT * FROM patient where patient_id =" + d_id + " ;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("data of the  patient you want to see:");
+            System.out.println("+------------+-----------+-----+---------+--------+---------------+--------------+");
+            System.out.println("| First name | Last name | age | disease | gender | Phone_number  | patient_id  |");
+            System.out.println("+------------+-----------+-----+---------+--------+---------------+--------------+");
+            while(rs.next()) {
+                if(rs.getInt("patients_id")==d_id){
+                    String Fname = rs.getString("F_name");
+                    String Lname = rs.getString("L_name");
+                    int age = rs.getInt("age");
+                    String dse = rs.getString("disease");
+                    String gen = rs.getString("gender");
+                    String p_no = rs.getString("phone_number");
+                    int pid = rs.getInt("patient_id");
+                    System.out.printf("| %-10s | %-8s | %-4d | %-10s | %-4s | %-10s | %-10d |\n", Fname, Lname, age, dse, gen, p_no, pid);
+                }else{
+                    System.out.println("there is no data present of the given patient with "+d_id+ "as patient id " );
+                }
+            }
+
+        }
+    }
+
     private static void addHos (Connection con, Scanner input){
         try {
             System.out.println("enter the hospital name ");
             String H_name = input.next();
-            System.out.println("enter the state name ");
+            System.out.println("enter the state name in which hospital is present");
             String S_name = input.next();
-            System.out.println("enter the city name ");
+            System.out.println("enter the city name in which hospital is present");
             String C_name = input.next();
-            System.out.println("enter the address");
+            System.out.println("enter the address of the address");
             String adr = input.nextLine();
             System.out.println("enter the hospital id ");
             int pid = input.nextInt();
@@ -596,7 +699,7 @@ public class hospital_db {
 
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.println("Current Reservations:");
+            System.out.println("all  hospitals from the database :");
             System.out.println("+---------------+-------+------+-----------------------------+--------------+");
             System.out.println("| hospital name | state | city |            address          | hospital_id  |");
             System.out.println("+---------------+-------+------+-----------------------------+--------------+");
@@ -691,6 +794,225 @@ public class hospital_db {
                 }
                 break;
 
+
+        }
+    }
+
+    private static void getHos(Connection con) throws SQLException {
+
+        System.out.println("enter the hospital id you want to check");
+        int d_id=input.nextInt();
+        String sql = "SELECT * FROM medical_record where hospital_id =" + d_id + " ;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("all hospital data from the database:");
+            System.out.println("+---------------+-------+------+-----------------------------+--------------+");
+            System.out.println("| hospital name | state | city |            address          | hospital_id  |");
+            System.out.println("+---------------+-------+------+-----------------------------+--------------+");
+            while(rs.next()) {
+                if(rs.getInt("hospital_id")==d_id){
+                    String Hname = rs.getString("hospital_name");
+                    String Sname = rs.getString("state");
+                    String Cname = rs.getString("city");
+                    String adr = rs.getString("address");
+                    int hid = rs.getInt("hospital_id");
+                    System.out.printf("| %-16s | %-8s | %-8s | %-20s | %-5d |\n", Hname, Sname, Cname, adr, hid);
+                    System.out.println("+---------------+-------+------+-----------------------------+--------------+");
+                }else{
+                    System.out.println("there is no data present of the given hospital with "+d_id+ "as hospital id " );
+                }
+            }
+
+        }
+    }
+
+    private static void addRec(Connection con, Scanner input){
+        try {
+            System.out.println("enter the record id ");
+            int R_id = input.nextInt();
+            System.out.println("enter the examination date in yyyy-mm-dd format");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String e_date = date.format(formatter);
+            System.out.println("enter the problem diagnosed ");
+            String p_found = input.next();
+            System.out.println("enter the doctor id");
+            int d_id = input.nextInt();
+            System.out.println("enter the patient id ");
+            int p_id = input.nextInt();
+            System.out.println("enter the hospital id ");
+            int h_id = input.nextInt();
+
+            String sql = "INSERT INTO medical_record( record_id, examination_date, problem_found, doctor_id, patient_id, hospital_id)\n"
+                    + "VALUES ('" + R_id + "','" + e_date + "'," + p_found + ",'" + d_id + "', '" + p_id + "','"+ h_id +"');";
+
+            try (Statement stmt = con.createStatement()) {
+//                ResultSet rs = stmt.executeQuery(sql);
+                int affectrows = stmt.executeUpdate(sql);
+                if (affectrows > 0) {
+                    System.out.println("added successful");
+                } else {
+                    System.out.println("failed to add data ");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("error coming");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void delRec(Connection con) {
+        try {
+            System.out.println("enter the Record id to delete from the database");
+            int rid = input.nextInt();
+            String sql = "DELETE * \n" +
+                    "FROM medical_record \n" +
+                    "WHERE record_id = " + rid;
+            try (Statement stmt = con.createStatement()) {
+                int affectrows = stmt.executeUpdate(sql);
+                if (affectrows > 0) {
+                    System.out.println("deletion successful");
+                } else {
+                    System.out.println("failed to delete data ");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void showRec(Connection con) throws SQLException {
+        String sql = "SELECT * FROM medical_record;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("Current records:");
+            System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+            System.out.println("| Record id | Examination date | Problem diagnosed | Doctor id | patient id | hospital_id  |");
+            System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+            while (rs.next()) {
+//                int s_no = rs.getInt("no");
+                int Rid = rs.getInt("record_id");
+                String e_date = rs.getString("examination_date");
+                String p_found = rs.getString("problem_found");
+                int did = rs.getInt("doctor_id");
+                int pid = rs.getInt("patient_id");
+                int hid = rs.getInt("hospital_id");
+                System.out.printf("| %-8d | %-10s | %-8s | %-8d | %-8d | %-8d |\n", Rid, e_date, p_found, did, pid, hid);
+                System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+            }
+
+        }
+    }
+
+    private static void updRec(Connection con, Scanner input) throws IOException {
+        System.out.println("enter the record id :");
+        int id = input.nextInt();
+        System.out.println("what do you want to change :");
+        System.out.println("1. problem found");
+        System.out.println("2. doctor id");
+        System.out.println("3. hospital id");
+        System.out.print("enter your choice:");
+        int ch = input.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        switch (ch) {
+            case 1:
+                System.out.println("enter the new problem diagnosed");
+                String p_found = br.readLine();
+                try {
+                    String sql = "UPDATE medical_record SET problem_found =" + p_found + "WHERE record_id = " + id+";";
+//                    PreparedStatement ps = con.prepareStatement(sql);
+//                    ps.setString(1,hname);
+
+                    try (Statement stmt = con.createStatement()) {
+                        int affectrows = stmt.executeUpdate(sql);
+                        if (affectrows > 0) {
+                            System.out.println("updated successfully ");
+                        } else {
+                            System.out.println("failed to update the data ");
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error coming");
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+            case 2:
+                System.out.println("enter the new doctor id");
+                int did = Integer.parseInt(br.readLine());
+                try {
+                    String sql = "UPDATE medical_record SET  =" + '?' + "\n" +
+                            "WHERE record_id =" + id;
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1,did);
+                    try (Statement stmt = con.createStatement()) {
+                        int affectrows = stmt.executeUpdate(sql);
+                        if (affectrows > 0) {
+                            System.out.println("updated successful");
+                        } else {
+                            System.out.println("failed to update data ");
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error coming");
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+            case 3:
+                System.out.println("enter the new hospital");
+                int hid = Integer.parseInt(br.readLine());
+                try {
+                    String sql = "UPDATE medical_record SET hospital_id =" + '?' + "\n" +
+                            "WHERE record_id =" + id;
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1,hid);
+                    try (Statement stmt = con.createStatement()) {
+                        int affectrows = stmt.executeUpdate(sql);
+                        if (affectrows > 0) {
+                            System.out.println("updated successfully ");
+                        } else {
+                            System.out.println("failed to update the data ");
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error coming");
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+
+        }
+    }
+
+    private static void getRec(Connection con) throws SQLException {
+
+        System.out.println("enter the record id you want to check");
+        int d_id=input.nextInt();
+        String sql = "SELECT * FROM medical_record where record_id =" + d_id + " ;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("Current records:");
+            System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+            System.out.println("| Record id | Examination date | Problem diagnosed | Doctor id | patient id | hospital_id  |");
+            System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+            while(rs.next()) {
+                if(rs.getInt("record_id")==d_id){
+                int Rid = rs.getInt("record_id");
+                String e_date = rs.getString("examination_date");
+                String p_found = rs.getString("problem_found");
+                int did = rs.getInt("doctor_id");
+                int pid = rs.getInt("patient_id");
+                int hid = rs.getInt("hospital_id");
+                System.out.printf("| %-10d | %-15s | %-10s | %-10d | %-10d | %-10d |\n", Rid, e_date, p_found, did, pid, hid);
+                System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
+//            }
+                }else{
+                    System.out.println("there is no data present of the given record with "+d_id+ "as record id " );
+                }
+            }
 
         }
     }
