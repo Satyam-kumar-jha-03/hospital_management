@@ -19,9 +19,11 @@ public class hospital_db {
         System.out.println(" 2. patient database");
         System.out.println(" 3. hospital database");
         System.out.println(" 4. record database");
+        System.out.println(" 5. relative database");
         System.out.println(" 0. Exit ");
         System.out.print(" choose an option --->");
         int ch = input.nextInt();
+        int b =0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             System.out.println("drivers loaded successfully");
@@ -33,7 +35,7 @@ public class hospital_db {
             System.out.println("connection successfully");
         switch(ch) {
             case 1:
-                while (true) {
+                while (b!=0) {
                     System.out.println(" Enter your Choice : ");
                     System.out.println(" 1. Add doctor data to the database ");
                     System.out.println(" 2. Remove Data from the database ");
@@ -61,13 +63,13 @@ public class hospital_db {
                             break;
                         case 0:
                             exit();
-                            input.close();
+                            b=a;
                         default:
                             System.out.println("invalid choice , please choose again ");
                     }
                 }
             case 2:
-                while (true) {
+                while (b!=0) {
                     System.out.println(" Enter your Choice : ");
                     System.out.println(" 1. Add doctor data to the database ");
                     System.out.println(" 2. Remove Data from the database ");
@@ -95,13 +97,13 @@ public class hospital_db {
                             break;
                         case 0:
                             exit();
-                            input.close();
+                            b=a;
                         default:
                             System.out.println("invalid choice , please choose again ");
                     }
                 }
             case 3:
-                while (true) {
+                while (b!=0) {
                     System.out.println(" Enter your Choice : ");
                     System.out.println(" 1. Add hospital data to the database ");
                     System.out.println(" 2. Remove Data from the database ");
@@ -129,13 +131,13 @@ public class hospital_db {
                             break;
                         case 0:
                             exit();
-                            input.close();
+                            b=a;
                         default:
                             System.out.println("invalid choice , please choose again ");
                     }
                 }
             case 4:
-                while (true) {
+                while (b!=0) {
                     System.out.println(" Enter your Choice : ");
                     System.out.println(" 1. Add record data to the database ");
                     System.out.println(" 2. Remove Data from the database ");
@@ -163,11 +165,51 @@ public class hospital_db {
                             break;
                         case 0:
                             exit();
-                            input.close();
+                            b=a;
                         default:
                             System.out.println("invalid choice , please choose again ");
                     }
                 }
+            case 5:
+                while (b!=0) {
+                    System.out.println(" Enter your Choice : ");
+                    System.out.println(" 1. Add relative data to the database ");
+                    System.out.println(" 2. Remove Data from the database ");
+                    System.out.println(" 3. Update record Data in the database ");
+                    System.out.println(" 4. show the relative database ");
+                    System.out.println(" 5. get relative details  ");
+                    System.out.println(" 0. Exit ");
+                    System.out.print(" choose an option --->");
+                    int a = input.nextInt();
+                    switch (a) {
+                        case 1:
+                            addRel(con, input);
+                            break;
+                        case 2:
+                            delRel(con);
+                            break;
+                        case 3:
+                            updRel(con, input);
+                            break;
+                        case 4:
+                            showRel(con);
+                            break;
+                        case 5:
+                            getRel(con);
+                            break;
+                        case 0:
+                            exit();
+                            b=a;
+                        default:
+                            System.out.println("invalid choice , please choose again ");
+                    }
+                }
+            case 0:
+                exit();
+                input.close();
+            default:
+                System.out.println("invalid choice. please choose again ");
+
 
         }} catch(SQLException e){
                 System.out.println(e.getMessage());
@@ -1017,5 +1059,165 @@ public class hospital_db {
         }
     }
 
-
+    private static void addRel(Connection con, Scanner input){
+        try {
+            System.out.println("enter the relative name ");
+            String R_name = input.next();
+            System.out.println("enter the patient name ");
+            String p_name = input.next();
+            System.out.println("enter the relation with the patient");
+            int relation = input.nextInt();
+            System.out.println("enter the patient id ");
+            int p_id = input.nextInt();
+            System.out.println("enter the relative id ");
+            int r_id = input.nextInt();
+            String sql = "INSERT INTO relative( record_id, examination_date, problem_found, doctor_id, patient_id, hospital_id)\n"
+                    + "VALUES ('" + R_name + "','" + p_name + "'," + relation +  "', '" + p_id + "','"+ r_id +"');";
+            try (Statement stmt = con.createStatement()) {
+//                ResultSet rs = stmt.executeQuery(sql);
+                int affectrows = stmt.executeUpdate(sql);
+                if (affectrows > 0) {
+                    System.out.println("added successful");
+                } else {
+                    System.out.println("failed to add data ");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("error coming");
+            System.out.println(e.getMessage());
+        }
     }
+
+    private static void delRel(Connection con) {
+        try {
+            System.out.println("enter the relative id to delete from the database");
+            int rid = input.nextInt();
+            String sql = "DELETE * \n" +
+                    "FROM relative \n" +
+                    "WHERE relative_id = " + rid;
+            try (Statement stmt = con.createStatement()) {
+                int affectrows = stmt.executeUpdate(sql);
+                if (affectrows > 0) {
+                    System.out.println("deletion successful");
+                } else {
+                    System.out.println("failed to delete data ");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void showRel(Connection con) throws SQLException {
+        String sql = "SELECT * FROM relative;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("Current relatives:");
+            System.out.println("+---------------+--------------+----------+------------+--------------+");
+            System.out.println("| Relative name | patient name | relation | patient id | relative id  |");
+            System.out.println("+---------------+--------------+----------+------------+--------------+");
+            while (rs.next()) {
+                int r_name = rs.getInt("relative_name");
+                String p_name = rs.getString("patient_name");
+                String rel = rs.getString("relation");
+                int pid = rs.getInt("patient_id");
+                int rid = rs.getInt("relative_id");
+                System.out.printf("| %-10s | %-10s | %-8s | %-8d | %-8d |\n", r_name, p_name, rel , pid, rid);
+                System.out.println("+---------------+--------------+----------+------------+--------------+");
+            }
+
+        }
+    }
+
+    private static void updRel(Connection con, Scanner input) throws IOException {
+        System.out.println("enter the relative id :");
+        int id = input.nextInt();
+        System.out.println("what do you want to change :");
+        System.out.println("1. relative name ");
+        System.out.println("2. relation");
+        System.out.print("enter your choice:");
+        int ch = input.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        switch (ch) {
+            case 1:
+                System.out.println("enter the new name of relative");
+                String p_found = br.readLine();
+                try {
+                    String sql = "UPDATE relative SET relative_name =" + p_found + "WHERE relative_id = " + id+";";
+//                    PreparedStatement ps = con.prepareStatement(sql);
+//                    ps.setString(1,hname);
+
+                    try (Statement stmt = con.createStatement()) {
+                        int affectrows = stmt.executeUpdate(sql);
+                        if (affectrows > 0) {
+                            System.out.println("updated successfully ");
+                        } else {
+                            System.out.println("failed to update the data ");
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error coming");
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+            case 2:
+                System.out.println("enter the new relation");
+                String rel =br.readLine();
+                try {
+                    String sql = "UPDATE relative SET  =" + '?' + "\n" +
+                            "WHERE record_id =" + id+";";
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setString(1,rel);
+                    try (Statement stmt = con.createStatement()) {
+                        int affectrows = stmt.executeUpdate(sql);
+                        if (affectrows > 0) {
+                            System.out.println("updated successful");
+                        } else {
+                            System.out.println("failed to update data ");
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.out.println("error coming");
+                    System.out.println(e.getMessage());
+                }
+                break;
+
+
+        }
+    }
+
+    private static void getRel(Connection con) throws SQLException {
+
+        System.out.println("enter the relative id you want to check");
+        System.out.println("it starts from 1101");
+        int d_id=input.nextInt();
+        String sql = "SELECT * FROM relative where relative_id =" + d_id + " ;";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("Current records:");
+            System.out.println("+---------------+--------------+----------+------------+--------------+");
+            System.out.println("| Relative name | patient name | relation | patient id | relative id  |");
+            System.out.println("+---------------+--------------+----------+------------+--------------+");
+            while(rs.next()) {
+                if(rs.getInt("record_id")==d_id){
+                    int r_name = rs.getInt("relative_name");
+                    String p_name = rs.getString("patient_name");
+                    String rel = rs.getString("relation");
+                    int pid = rs.getInt("patient_id");
+                    int rid = rs.getInt("relative_id");
+                    System.out.printf("| %-8s | %-10s | %-8s | %-8d | %-8d |\n", r_name, p_name, rel , pid, rid);
+                    System.out.println("+---------------+--------------+----------+------------+--------------+");
+                } else{
+                    System.out.println("there is no data present of the given record with "+d_id+ "as relative id " );
+                }
+            }
+
+        }
+    }
+
+
+
+}
