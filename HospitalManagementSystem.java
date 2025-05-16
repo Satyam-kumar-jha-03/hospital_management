@@ -18,7 +18,7 @@ public class HospitalManagementSystem {
     public static void main(String[] args) {
         try {
             // Load JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             
             // Establish database connection
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
