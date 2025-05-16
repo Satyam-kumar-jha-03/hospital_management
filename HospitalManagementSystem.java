@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class HospitalManagementSystem {
-    // Database configuration
     private static final String DB_URL = "jdbc:mysql://localhost:3306/hospital_management";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "spsp.0011";
@@ -17,14 +16,9 @@ public class HospitalManagementSystem {
 
     public static void main(String[] args) {
         try {
-            // Load JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
-            
-            // Establish database connection
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             System.out.println("Database connection established successfully.");
-            
-            // Start the application
             showMainMenu();
             
         } catch (ClassNotFoundException e) {
@@ -32,17 +26,13 @@ public class HospitalManagementSystem {
         } catch (SQLException e) {
             System.err.println("Database connection failed: " + e.getMessage());
         } finally {
-            // Close resources
             if (scanner != null) scanner.close();
             if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
                     System.err.println("Error closing connection: " + e.getMessage());
-                }
-            }
-        }
-    }
+                }}}}
 
     private static void showMainMenu() {
         while (true) {
@@ -56,7 +46,7 @@ public class HospitalManagementSystem {
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
             
             switch (choice) {
                 case 1:
@@ -79,11 +69,7 @@ public class HospitalManagementSystem {
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
-
-    // Doctor Operations
+            }}}
     private static void doctorOperations() {
         while (true) {
             System.out.println("\n=== Doctor Operations ===");
@@ -96,7 +82,7 @@ public class HospitalManagementSystem {
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
             
             try {
                 switch (choice) {
@@ -122,9 +108,7 @@ public class HospitalManagementSystem {
                 }
             } catch (SQLException | IOException e) {
                 System.err.println("Error: " + e.getMessage());
-            }
-        }
-    }
+            }}}
 
     private static void addDoctor() throws SQLException {
         System.out.println("\n--- Add New Doctor ---");
@@ -169,9 +153,7 @@ public class HospitalManagementSystem {
                 System.out.println("Doctor added successfully!");
             } else {
                 System.out.println("Failed to add doctor.");
-            }
-        }
-    }
+            }}}
 
     private static void deleteDoctor() throws SQLException {
         System.out.println("\n--- Delete Doctor ---");
@@ -189,9 +171,7 @@ public class HospitalManagementSystem {
                 System.out.println("Doctor deleted successfully!");
             } else {
                 System.out.println("No doctor found with ID: " + doctorId);
-            }
-        }
-    }
+            }}}
 
     private static void updateDoctor() throws SQLException, IOException {
         System.out.println("\n--- Update Doctor ---");
@@ -253,9 +233,7 @@ public class HospitalManagementSystem {
                 statement.setString(1, newValue);
                 statement.setInt(2, doctorId);
                 executeUpdate(statement);
-            }
-        }
-    }
+            }}}
 
     private static void viewAllDoctors() throws SQLException {
         System.out.println("\n--- All Doctors ---");
@@ -280,9 +258,7 @@ public class HospitalManagementSystem {
                 System.out.printf("| %-10s | %-9s | %-3d | %-14s | %-6s | %-10d | %-12d |\n",
                         firstName, lastName, age, specialization, gender, doctorId, hospitalId);
                 System.out.println("+------------+-----------+-----+----------------+--------+------------+--------------+");
-            }
-        }
-    }
+            }}}
 
     private static void viewDoctorDetails() throws SQLException {
         System.out.println("\n--- Doctor Details ---");
@@ -315,12 +291,7 @@ public class HospitalManagementSystem {
                     System.out.println("+------------+-----------+-----+----------------+--------+------------+--------------+");
                 } else {
                     System.out.println("No doctor found with ID: " + doctorId);
-                }
-            }
-        }
-    }
-
-    // Patient Operations (similar structure to Doctor Operations)
+                }}}}
     private static void patientOperations() {
         while (true) {
             System.out.println("\n=== Patient Operations ===");
@@ -359,9 +330,7 @@ public class HospitalManagementSystem {
                 }
             } catch (SQLException | IOException e) {
                 System.err.println("Error: " + e.getMessage());
-            }
-        }
-    }
+            }}}
 
     private static void addPatient() throws SQLException {
         System.out.println("\n--- Add New Patient ---");
@@ -406,9 +375,7 @@ public class HospitalManagementSystem {
                 System.out.println("Patient added successfully!");
             } else {
                 System.out.println("Failed to add patient.");
-            }
-        }
-    }
+            }}}
 
     private static void deletePatient() throws SQLException {
         System.out.println("\n--- Delete Patient ---");
@@ -426,9 +393,7 @@ public class HospitalManagementSystem {
                 System.out.println("Patient deleted successfully!");
             } else {
                 System.out.println("No patient found with ID: " + patientId);
-            }
-        }
-    }
+            }}}
 
     private static void updatePatient() throws SQLException, IOException {
         System.out.println("\n--- Update Patient ---");
@@ -496,9 +461,7 @@ public class HospitalManagementSystem {
                 statement.setString(1, newValue);
                 statement.setInt(2, patientId);
                 executeUpdate(statement);
-            }
-        }
-    }
+            }}}
 
     private static void viewAllPatients() throws SQLException {
         System.out.println("\n--- All Patients ---");
@@ -523,9 +486,7 @@ public class HospitalManagementSystem {
                 System.out.printf("| %-10s | %-9s | %-3d | %-14s | %-6s | %-14s | %-10d |\n",
                         firstName, lastName, age, disease, gender, phoneNumber, patientId);
                 System.out.println("+------------+-----------+-----+----------------+--------+----------------+------------+");
-            }
-        }
-    }
+            }}}
 
     private static void viewPatientDetails() throws SQLException {
         System.out.println("\n--- Patient Details ---");
@@ -558,12 +519,7 @@ public class HospitalManagementSystem {
                     System.out.println("+------------+-----------+-----+----------------+--------+----------------+------------+");
                 } else {
                     System.out.println("No patient found with ID: " + patientId);
-                }
-            }
-        }
-    }
-
-    // Hospital Operations (similar structure)
+                }}}}
     private static void hospitalOperations() {
         while (true) {
             System.out.println("\n=== Hospital Operations ===");
@@ -602,9 +558,7 @@ public class HospitalManagementSystem {
                 }
             } catch (SQLException | IOException e) {
                 System.err.println("Error: " + e.getMessage());
-            }
-        }
-    }
+            }}}
 
     private static void addHospital() throws SQLException {
         System.out.println("\n--- Add New Hospital ---");
@@ -640,9 +594,7 @@ public class HospitalManagementSystem {
                 System.out.println("Hospital added successfully!");
             } else {
                 System.out.println("Failed to add hospital.");
-            }
-        }
-    }
+            }}}
 
     private static void deleteHospital() throws SQLException {
         System.out.println("\n--- Delete Hospital ---");
@@ -660,9 +612,7 @@ public class HospitalManagementSystem {
                 System.out.println("Hospital deleted successfully!");
             } else {
                 System.out.println("No hospital found with ID: " + hospitalId);
-            }
-        }
-    }
+            }}}
 
     private static void updateHospital() throws SQLException, IOException {
         System.out.println("\n--- Update Hospital ---");
@@ -708,8 +658,7 @@ public class HospitalManagementSystem {
             statement.setString(1, newValue);
             statement.setInt(2, hospitalId);
             executeUpdate(statement);
-        }
-    }
+        }}
 
     private static void viewAllHospitals() throws SQLException {
         System.out.println("\n--- All Hospitals ---");
@@ -732,9 +681,7 @@ public class HospitalManagementSystem {
                 System.out.printf("| %-16s | %-10s | %-10s | %-27s | %-12d |\n",
                         hospitalName, state, city, address, hospitalId);
                 System.out.println("+------------------+------------+------------+-----------------------------+--------------+");
-            }
-        }
-    }
+            }}}
 
     private static void viewHospitalDetails() throws SQLException {
         System.out.println("\n--- Hospital Details ---");
@@ -765,12 +712,8 @@ public class HospitalManagementSystem {
                     System.out.println("+------------------+------------+------------+-----------------------------+--------------+");
                 } else {
                     System.out.println("No hospital found with ID: " + hospitalId);
-                }
-            }
-        }
-    }
+                }}}}
 
-    // Medical Record Operations (similar structure)
     private static void recordOperations() {
         while (true) {
             System.out.println("\n=== Medical Record Operations ===");
@@ -809,9 +752,7 @@ public class HospitalManagementSystem {
                 }
             } catch (SQLException | IOException e) {
                 System.err.println("Error: " + e.getMessage());
-            }
-        }
-    }
+            }}}
 
     private static void addMedicalRecord() throws SQLException {
         System.out.println("\n--- Add New Medical Record ---");
@@ -852,9 +793,7 @@ public class HospitalManagementSystem {
                 System.out.println("Medical record added successfully!");
             } else {
                 System.out.println("Failed to add medical record.");
-            }
-        }
-    }
+            }}}
 
     private static void deleteMedicalRecord() throws SQLException {
         System.out.println("\n--- Delete Medical Record ---");
@@ -872,9 +811,7 @@ public class HospitalManagementSystem {
                 System.out.println("Medical record deleted successfully!");
             } else {
                 System.out.println("No medical record found with ID: " + recordId);
-            }
-        }
-    }
+            }}}
 
     private static void updateMedicalRecord() throws SQLException, IOException {
         System.out.println("\n--- Update Medical Record ---");
@@ -930,9 +867,7 @@ public class HospitalManagementSystem {
                 statement.setInt(1, newId);
                 statement.setInt(2, recordId);
                 executeUpdate(statement);
-            }
-        }
-    }
+            }}}
 
     private static void viewAllMedicalRecords() throws SQLException {
         System.out.println("\n--- All Medical Records ---");
@@ -956,9 +891,7 @@ public class HospitalManagementSystem {
                 System.out.printf("| %-9d | %-16s | %-17s | %-9d | %-10d | %-12d |\n",
                         recordId, examinationDate, problemFound, doctorId, patientId, hospitalId);
                 System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
-            }
-        }
-    }
+            }}}
 
     private static void viewMedicalRecordDetails() throws SQLException {
         System.out.println("\n--- Medical Record Details ---");
@@ -990,12 +923,7 @@ public class HospitalManagementSystem {
                     System.out.println("+-----------+------------------+-------------------+-----------+------------+--------------+");
                 } else {
                     System.out.println("No medical record found with ID: " + recordId);
-                }
-            }
-        }
-    }
-
-    // Relative Operations (similar structure)
+                }}}}
     private static void relativeOperations() {
         while (true) {
             System.out.println("\n=== Relative Operations ===");
@@ -1034,9 +962,7 @@ public class HospitalManagementSystem {
                 }
             } catch (SQLException | IOException e) {
                 System.err.println("Error: " + e.getMessage());
-            }
-        }
-    }
+            }}}
 
     private static void addRelative() throws SQLException {
         System.out.println("\n--- Add New Relative ---");
@@ -1072,9 +998,7 @@ public class HospitalManagementSystem {
                 System.out.println("Relative added successfully!");
             } else {
                 System.out.println("Failed to add relative.");
-            }
-        }
-    }
+            }}}
 
     private static void deleteRelative() throws SQLException {
         System.out.println("\n--- Delete Relative ---");
@@ -1092,9 +1016,7 @@ public class HospitalManagementSystem {
                 System.out.println("Relative deleted successfully!");
             } else {
                 System.out.println("No relative found with ID: " + relativeId);
-            }
-        }
-    }
+            }}}
 
     private static void updateRelative() throws SQLException, IOException {
         System.out.println("\n--- Update Relative ---");
@@ -1134,8 +1056,7 @@ public class HospitalManagementSystem {
             statement.setString(1, newValue);
             statement.setInt(2, relativeId);
             executeUpdate(statement);
-        }
-    }
+        }}
 
     private static void viewAllRelatives() throws SQLException {
         System.out.println("\n--- All Relatives ---");
@@ -1158,9 +1079,7 @@ public class HospitalManagementSystem {
                 System.out.printf("| %-13s | %-12s | %-8s | %-10d | %-12d |\n",
                         relativeName, patientName, relation, patientId, relativeId);
                 System.out.println("+---------------+--------------+----------+------------+--------------+");
-            }
-        }
-    }
+            }}}
 
     private static void viewRelativeDetails() throws SQLException {
         System.out.println("\n--- Relative Details ---");
@@ -1191,31 +1110,22 @@ public class HospitalManagementSystem {
                     System.out.println("+---------------+--------------+----------+------------+--------------+");
                 } else {
                     System.out.println("No relative found with ID: " + relativeId);
-                }
-            }
-        }
-    }
-
-    // Helper method to execute updates
+                }}}}
     private static void executeUpdate(PreparedStatement statement) throws SQLException {
         int affectedRows = statement.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Update successful!");
         } else {
             System.out.println("No records were updated.");
-        }
-    }
+        }}
 
     private static void exitSystem() {
         System.out.println("\nExiting Hospital Management System...");
         try {
             for (int i = 0; i < 5; i++) {
                 System.out.print(".");
-                Thread.sleep(450);
-            }
+                Thread.sleep(450);}
             System.out.println("\nThank you for using Hospital Management System!");
         } catch (InterruptedException e) {
             System.err.println("Error during exit: " + e.getMessage());
-        }
-    }
-}
+        }}}
